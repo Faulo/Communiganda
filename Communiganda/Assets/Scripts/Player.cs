@@ -31,8 +31,7 @@ public class Player : MonoBehaviour
         body2d = GetComponentInChildren<Rigidbody2D>();
         speechBubbleSpriteRend.enabled = false;
         speechBubbleSymbolSpriteRend.enabled = false;
-        speechBubbleSymbolSpriteRend.sprite = playerthought.GetSprite();
-        playerThoughtImage.sprite = playerthought.GetSprite();
+        SetThougtSprites();
     }
 
     void Start()
@@ -62,8 +61,7 @@ public class Player : MonoBehaviour
         else if (love) playerthought = Thought.Love;
         if (newInput && inSpeechAttack == false)
         {
-            speechBubbleSymbolSpriteRend.sprite = playerthought.GetSprite();
-            playerThoughtImage.sprite = playerthought.GetSprite();
+            SetThougtSprites();
         }
     }
 
@@ -102,6 +100,12 @@ public class Player : MonoBehaviour
             }
             yield return null;
         }
+    }
+
+    public void SetThougtSprites()
+    {
+        speechBubbleSymbolSpriteRend.sprite = playerthought.GetSprite();
+      //  playerThoughtImage.sprite = playerthought.GetSprite();
     }
 
     private void OnDrawGizmos()
