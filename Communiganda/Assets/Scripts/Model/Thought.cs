@@ -26,7 +26,22 @@ static class ThoughtExtensions
     }
     public static void Battle(this Thought thought, SpecimenBehavior sender, SpecimenBehavior receiver)
     {
-        receiver.thought = new[] { sender.thought, receiver.thought }.RandomElement();
-        sender.thought = new[] { sender.thought, receiver.thought }.RandomElement();
+        if (receiver.thought == Thought.Nothing)
+        {
+            receiver.thought = thought;
+        }
+        else
+        {
+            receiver.thought = new[] { sender.thought, receiver.thought }.RandomElement();
+        }
+
+        if (sender.thought == Thought.Nothing)
+        {
+            sender.thought = thought;
+        }
+        else
+        {
+            sender.thought = new[] { sender.thought, receiver.thought }.RandomElement();
+        }
     }
 }

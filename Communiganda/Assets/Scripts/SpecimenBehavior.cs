@@ -59,7 +59,7 @@ public class SpecimenBehavior : MonoBehaviour
         receiveBubble = transform.Find("Sprites").Find("ReceiveBubble").gameObject;
         receiveSymbolSpriteRenderer = receiveBubble.transform.Find("Symbol").GetComponent<SpriteRenderer>();
 
-        thought = new[] { Thought.Nothing, Thought.Love, Thought.Money , Thought.Food }.RandomElement();
+        thought = new[] { Thought.Nothing, Thought.Nothing, Thought.Nothing, Thought.Love, Thought.Money , Thought.Food }.RandomElement();
 
         ClearLookingTarget();
     }
@@ -88,7 +88,7 @@ public class SpecimenBehavior : MonoBehaviour
         GameObject other = collision.gameObject;
         SpecimenBehavior npc = other.GetComponent<SpecimenBehavior>();
         if (npc != null) {
-            if (this.CanEncounter(npc) && npc.CanEncounter(this))
+            if (this.CanEncounter(npc) && npc.CanEncounter(this) && engagesWith.Contains(npc.id))
             {
                 this.StopAllCoroutines();
                 npc.StopAllCoroutines();
@@ -171,7 +171,7 @@ public class SpecimenBehavior : MonoBehaviour
         {
             case State.Idle:
             case State.Walking:
-                return npc != lastSpecimen && engagesWith.Contains(npc.id);
+                return npc != lastSpecimen && npc.thought != thought;
             case State.Busy:
             case State.Trapped:
                 return false;
