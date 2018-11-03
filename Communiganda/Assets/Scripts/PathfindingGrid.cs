@@ -9,15 +9,17 @@ public class PathfindingGrid : MonoBehaviour
     public int height = 5;
     bool[,] tilesmap;
 
-    public Vector2 targetPoint;
-
     public NesScripts.Controls.PathFind.Grid Grid { get; private set; }
     public static PathfindingGrid Instance;
 
+    [SerializeField] private Transform backgroundTransform;
 
     private void Awake()
     {
-        Instance = this;    
+        Instance = this;
+        SetEdgeColliders();
+        backgroundTransform.position = new Vector3((width / 2f) - .5f, (height / 2) - .5f, 0);
+        backgroundTransform.localScale = new Vector3(width, height, 0);
     }
 
     void Start()
@@ -41,28 +43,23 @@ public class PathfindingGrid : MonoBehaviour
 
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    Point _from = ConvertPositionToPoint(new Vector2(transform.position.x, transform.position.y));
-        //    Point _to = ConvertPositionToPoint(targetPoint);//GenerateRandomTargetPointInsideGrid();
-
-        //    List<Point> path = NesScripts.Controls.PathFind.Pathfinding.FindPath(Grid, _from, _to, NesScripts.Controls.PathFind.Pathfinding.DistanceType.Manhattan);
-        //    Vector2[] points = new Vector2[path.Count];
-        //    for (int i = 0; i < points.Length; i++)
-        //    {
-        //        points[i] = new Vector2(path[i].x, path[i].y);
-        //    }
-        //    Utility.instance.MoveToWaypoints(transform, .1f, null, points);
-        //}
-
 
     }
 
     private void OnDrawGizmos()
     {
-        if (tilesmap == null) return;
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(targetPoint, 0.25f);
+        if (tilesmap == null)
+        {
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    Gizmos.DrawWireCube(new Vector2(i, j), new Vector3(0.9f, .9f));
+                }
+            }
+            return;
+        }
+
         for (int x = 0; x < tilesmap.GetLength(0); x += 1)
         {
             for (int y = 0; y < tilesmap.GetLength(1); y += 1)
@@ -75,7 +72,10 @@ public class PathfindingGrid : MonoBehaviour
 
     public Point ConvertPositionToPoint(Vector2 pos)
     {
-        return new Point(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y));
+        Point point = new Point(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y));
+        point.x = Mathf.Clamp(point.x, 0, width - 1);
+        point.y = Mathf.Clamp(point.y, 0, height - 1);
+        return point;
     }
 
     public Point GenerateRandomTargetPointInsideGrid()
@@ -91,12 +91,21 @@ public class PathfindingGrid : MonoBehaviour
 
     public Vector2[] GetWaypoints(Point from, Point to)
     {
-        List<Point> path = NesScripts.Controls.PathFind.Pathfinding.FindPath(Grid, from, to);
+        List<Point> path = Pathfinding.FindPath(Grid, from, to);
         Vector2[] points = new Vector2[path.Count];
         for (int i = 0; i < points.Length; i++)
         {
             points[i] = new Vector2(path[i].x, path[i].y);
         }
         return points;
+    }
+
+    private void SetEdgeColliders()
+    {
+        float offset = .5f;
+        EdgeCollider2D edgeCollider = gameObject.AddComponent<EdgeCollider2D>();
+        edgeCollider.points = new Vector2[] { new Vector2(-offset, -offset), new Vector2(-offset, height - offset),
+                                              new Vector2(width -offset, height-offset), new Vector2(width-offset, -offset),new Vector2(-offset, -offset) };
+
     }
 }
