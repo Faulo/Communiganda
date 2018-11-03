@@ -383,9 +383,10 @@ MonoBehaviour:
   hatSpriteRend: {fileID: 212706630703337574}
   speechBubbleSpriteRend: {fileID: 212082009965956052}
   speechBubbleSymbolSpriteRend: {fileID: 212970319700239908}
-  playerthought: 0
+  playerthought: 1
   playerThoughtImage: {fileID: 0}
   thoughtSprites:
+  - {fileID: 0}
   - {fileID: 21300000, guid: 7351b34c2c0164f43bda3e293ca57830, type: 3}
   - {fileID: 21300000, guid: f8201770cc4aebc4898ceb0d292ddb4c, type: 3}
   - {fileID: 21300000, guid: bea1d1c47264c9e47a1134beca48da05, type: 3}

@@ -26,15 +26,13 @@ public class Player : MonoBehaviour
     public Thought playerthought;
     [SerializeField] private Image playerThoughtImage;
 
-    [SerializeField] private Sprite[] thoughtSprites;
-
     private void Awake()
     {
         body2d = GetComponentInChildren<Rigidbody2D>();
         speechBubbleSpriteRend.enabled = false;
         speechBubbleSymbolSpriteRend.enabled = false;
-        speechBubbleSymbolSpriteRend.sprite = thoughtSprites[(int)playerthought];
-        playerThoughtImage.sprite = thoughtSprites[(int)playerthought];
+        speechBubbleSymbolSpriteRend.sprite = playerthought.GetSprite();
+        playerThoughtImage.sprite = playerthought.GetSprite();
     }
 
     void Start()
@@ -52,8 +50,8 @@ public class Player : MonoBehaviour
         input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         moving = input.sqrMagnitude > .1f;
         body2d.velocity = input * moveSpeed * Time.deltaTime;
-
-        if (Input.GetKeyDown(KeyCode.E) && speechAttackRoutine == null)
+        bool inSpeechAttack = speechAttackRoutine != null;
+        if (Input.GetKeyDown(KeyCode.E) && inSpeechAttack == false)
         {
             speechAttackRoutine = StartCoroutine(SpeechAttack());
         }
@@ -62,10 +60,10 @@ public class Player : MonoBehaviour
         bool newInput = danger | love;
         if (danger) playerthought = Thought.Danger;
         else if (love) playerthought = Thought.Love;
-        if (newInput)
+        if (newInput && inSpeechAttack == false)
         {
-            speechBubbleSymbolSpriteRend.sprite = thoughtSprites[(int)playerthought];
-            playerThoughtImage.sprite = thoughtSprites[(int)playerthought];
+            speechBubbleSymbolSpriteRend.sprite = playerthought.GetSprite();
+            playerThoughtImage.sprite = playerthought.GetSprite();
         }
     }
 
