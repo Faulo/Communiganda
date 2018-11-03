@@ -61,7 +61,7 @@ namespace NesScripts.Controls.PathFind
         {
             // check type
             if (!(obj.GetType() == typeof(PathFind.Point)))
-                 return false;
+                return false;
 
             // check if other is null
             Point p = (Point)obj;
@@ -127,6 +127,11 @@ namespace NesScripts.Controls.PathFind
             this.x = iX;
             this.y = iY;
             return this;
+        }
+
+        public override string ToString()
+        {
+            return x + "/" + y;
         }
     }
 }

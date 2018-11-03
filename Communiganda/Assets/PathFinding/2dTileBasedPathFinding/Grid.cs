@@ -13,7 +13,7 @@ namespace NesScripts.Controls.PathFind
     /// A 2D grid of nodes we use to find path.
     /// The grid mark which tiles are walkable and which are not.
     /// </summary>
-    public class Grid2D
+    public class Grid
     {
         // nodes in grid
         public Node[,] nodes;
@@ -30,7 +30,7 @@ namespace NesScripts.Controls.PathFind
         ///     > 1.0f = costy tile.
         ///     < 1.0f = cheap tile.
         /// </param>
-        public Grid2D(float[,] tiles_costs)
+        public Grid(float[,] tiles_costs)
         {
             // create nodes
             CreateNodes(tiles_costs.GetLength(0), tiles_costs.GetLength(1));
@@ -50,7 +50,7 @@ namespace NesScripts.Controls.PathFind
         /// Create a new grid without tile prices, eg with just walkable / unwalkable tiles.
         /// </summary>
         /// <param name="walkable_tiles">A 2d array representing which tiles are walkable and which are not.</param>
-        public Grid2D(bool[,] walkable_tiles)
+        public Grid(bool[,] walkable_tiles)
         {
             // create nodes
             CreateNodes(walkable_tiles.GetLength(0), walkable_tiles.GetLength(1));

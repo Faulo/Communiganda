@@ -43,7 +43,7 @@ namespace NesScripts.Controls.PathFind
         /// <param name="distance">The type of distance, Euclidean or Manhattan.</param>
         /// <param name="ignorePrices">If true, will ignore tile price (how much it "cost" to walk on).</param>
         /// <returns>List of points that represent the path to walk.</returns>
-		public static List<Point> FindPath(Grid2D grid, Point startPos, Point targetPos, DistanceType distance = DistanceType.Euclidean, bool ignorePrices = false)
+		public static List<Point> FindPath(Grid grid, Point startPos, Point targetPos, DistanceType distance = DistanceType.Euclidean, bool ignorePrices = false)
         {
             // find path
             List<Node> nodes_path = _ImpFindPath(grid, startPos, targetPos, distance, ignorePrices);
@@ -69,7 +69,7 @@ namespace NesScripts.Controls.PathFind
         /// <param name="distance">The type of distance, Euclidean or Manhattan.</param>
         /// <param name="ignorePrices">If true, will ignore tile price (how much it "cost" to walk on).</param>
         /// <returns>List of grid nodes that represent the path to walk.</returns>
-        private static List<Node> _ImpFindPath(Grid2D grid, Point startPos, Point targetPos, DistanceType distance = DistanceType.Euclidean, bool ignorePrices = false)
+        private static List<Node> _ImpFindPath(Grid grid, Point startPos, Point targetPos, DistanceType distance = DistanceType.Euclidean, bool ignorePrices = false)
         {
             Node startNode = grid.nodes[startPos.x, startPos.y];
             Node targetNode = grid.nodes[targetPos.x, targetPos.y];
@@ -127,7 +127,7 @@ namespace NesScripts.Controls.PathFind
         /// <param name="startNode">Starting node.</param>
         /// <param name="endNode">Ending (target) node.</param>
         /// <returns>Retraced path between nodes.</returns>
-        private static List<Node> RetracePath(Grid2D grid, Node startNode, Node endNode)
+        private static List<Node> RetracePath(Grid grid, Node startNode, Node endNode)
         {
             List<Node> path = new List<Node>();
             Node currentNode = endNode;
