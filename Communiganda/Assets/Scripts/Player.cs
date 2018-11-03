@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
 
     public Thought playerthought;
     [SerializeField] private Image playerThoughtImage;
+    public LayerMask npcLayer;
 
     private void Awake()
     {
@@ -69,13 +70,13 @@ public class Player : MonoBehaviour
     {
         speechBubbleSpriteRend.enabled = true;
         speechBubbleSymbolSpriteRend.enabled = true;
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, speechAttackRadius);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, speechAttackRadius, npcLayer);
         for (int i = 0; i < colliders.Length; i++)
         {
 
         }
         yield return new WaitForSeconds(2f);
-        speechBubbleSpriteRend.enabled = false; 
+        speechBubbleSpriteRend.enabled = false;
         speechBubbleSymbolSpriteRend.enabled = false;
         speechAttackRoutine = null;
     }
@@ -105,7 +106,7 @@ public class Player : MonoBehaviour
     public void SetThougtSprites()
     {
         speechBubbleSymbolSpriteRend.sprite = playerthought.GetSprite();
-      //  playerThoughtImage.sprite = playerthought.GetSprite();
+        //  playerThoughtImage.sprite = playerthought.GetSprite();
     }
 
     private void OnDrawGizmos()
