@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum Channel {
-    spokenWords,
-    shoutedWords,
-    writtenSymbols,
-    signLanguage,
-    tweets
+    SpokenWords,
+    ShoutedWords,
+    WrittenSymbols,
+    SignLanguage,
+    Tweets
 }
