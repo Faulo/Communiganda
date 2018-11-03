@@ -897,7 +897,7 @@ MonoBehaviour:
   titleText: {fileID: 1123407416}
   titleTextString: Communiganda
   titleTextDelay: 3
-  titleTextIntervall: 0.1
+  titleTextIntervall: 0.25
   anyKeyText: {fileID: 187488335}
   anyKeyFadeInOutCurve:
     serializedVersion: 2

@@ -14,6 +14,8 @@ public class PathfindingGrid : MonoBehaviour
 
     [SerializeField] private Transform backgroundTransform;
 
+    public LayerMask obstacleMask;
+
     private void Awake()
     {
         Instance = this;
@@ -29,16 +31,19 @@ public class PathfindingGrid : MonoBehaviour
         {
             for (int y = 0; y < tilesmap.GetLength(1); y += 1)
             {
-                tilesmap[x, y] = true;
+                if (Physics2D.BoxCast(new Vector2(x, y), new Vector2(.95f, .95f), 0f, Vector2.up, 1f, obstacleMask))
+                {
+                    tilesmap[x, y] = false;
+                }
+                else tilesmap[x, y] = true;
             }
         }
-        tilesmap[1, 0] = false;
-        tilesmap[1, 1] = false;
-        tilesmap[1, 2] = false;
-        tilesmap[1, 3] = false;
-
+        //tilesmap[1, 0] = false;
+        //tilesmap[1, 1] = false;
+        //tilesmap[1, 2] = false;
+        //tilesmap[1, 3] = false;
         Grid = new NesScripts.Controls.PathFind.Grid(tilesmap);
-        Camera.main.transform.position = Vector3.zero + new Vector3((width - 1) / 2, (height - 1) / 2f, -10f);
+        Camera.main.transform.position = Vector3.zero + new Vector3((width - 1) / 2, (height - 1) / 2f, -100f);
     }
 
     void Update()
