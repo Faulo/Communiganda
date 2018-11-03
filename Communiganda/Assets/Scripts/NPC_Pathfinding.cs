@@ -7,7 +7,7 @@ public class NPC_Pathfinding : MonoBehaviour
 {
     private PathfindingGrid pathfindingGrid { get { return PathfindingGrid.Instance; } }
 
-    private Coroutine moveRoutine;
+    public Coroutine MoveRoutine { get; private set; }
 
     private Vector2[] wayPoints;
 
@@ -28,8 +28,15 @@ public class NPC_Pathfinding : MonoBehaviour
             Point _from = pathfindingGrid.ConvertPositionToPoint(new Vector2(transform.position.x, transform.position.y));
             Point _to = pathfindingGrid.GenerateRandomTargetPointInsideGrid();
             wayPoints = pathfindingGrid.GetWaypoints(_from, _to);
-            Utility.instance.MoveToWaypoints(transform, .1f, null, wayPoints);
+            if (MoveRoutine != null) StopCoroutine(MoveRoutine);
+            MoveRoutine = StartCoroutine(Utility.instance.MoveToWaypointsRoutine(transform, .1f, null, wayPoints));
         }
+
+    }
+
+    public void StopMoving()
+    {
+        if (MoveRoutine != null) StopCoroutine(MoveRoutine);
 
     }
 }
