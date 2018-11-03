@@ -224,7 +224,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 16
   height: 9
-  backgroundTransform: {fileID: 0}
+  backgroundTransform: {fileID: 398074030}
 --- !u!4 &281023024
 Transform:
   m_ObjectHideFlags: 0

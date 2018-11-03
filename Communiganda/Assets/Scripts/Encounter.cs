@@ -1,14 +1,39 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System.Collections;
 
-public class Encounter
+public static class Encounter 
 {
-    public GameObject sender;
-    public GameObject receiver;
-
-    public Encounter(GameObject sender, GameObject receiver)
+    public static IEnumerator Create(SpecimenBehavior sender, SpecimenBehavior receiver)
     {
-        this.sender = sender;
-        this.receiver = receiver;
+        sender.PrepareEncounter(receiver);
+        receiver.PrepareEncounter(sender);
+
+        var distance = 2f;
+        var x = receiver.transform.position.x + distance;
+        var y = receiver.transform.position.y;
+
+        IEnumerator list = sender.MoveToPositionRoutine(new Vector2(x, y));
+        while (list.MoveNext())
+        {
+            yield return list.Current;
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        var package = sender.CreatePackage();
+
+        yield return new WaitForSeconds(0.5f);
+
+        receiver.ReceivePackage(package);
+
+        yield return new WaitForSeconds(0.5f);
+
+        receiver.ProcessPackage(package);
+
+        yield return new WaitForSeconds(1f);
+
+        sender.FinishEncounter();
+        receiver.FinishEncounter();
     }
 }
