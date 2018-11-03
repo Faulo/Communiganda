@@ -12,9 +12,12 @@ public class SpecimenBehavior : MonoBehaviour {
 
     public bool isBusy;
 
+    private NPC_Pathfinding pathFinding;
+
     // Use this for initialization
     void Start ()
     {
+        pathFinding = GetComponent<NPC_Pathfinding>();
     }
 	
 	// Update is called once per frame
@@ -29,7 +32,7 @@ public class SpecimenBehavior : MonoBehaviour {
         if (npc != null) {
             if (isBusy == false && npc.isBusy == false)
             {
-                StartCoroutine("Encounter", npc);
+                StartCoroutine(Encounter(npc));
             }
         }
     }
@@ -39,12 +42,17 @@ public class SpecimenBehavior : MonoBehaviour {
         this.isBusy = true;
         npc.isBusy = true;
 
+        this.pathFinding.StopMoving();
+        npc.pathFinding.StopMoving();
+
         var x = (transform.position.x + npc.transform.position.x) / 2;
         var y = (transform.position.y + npc.transform.position.y) / 2;
-        var distance = 10;
+        var distance = 1f;
 
         this.transform.position = new Vector3(x - distance / 2, y, this.transform.position.z);
         npc.transform.position = new Vector3(x + distance / 2, y, npc.transform.position.z);
+
+        Debug.Log("this + npc");
 
         yield return new WaitForSeconds(1f);
 
