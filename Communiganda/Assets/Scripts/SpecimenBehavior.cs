@@ -21,7 +21,7 @@ public class SpecimenBehavior : MonoBehaviour
     [SerializeField] private float moveDuration = 0.1f;
     
     private Thought _thought;
-    private Thought thought {
+    public Thought thought {
         set {
             _thought = value;
             if (thought == Thought.Nothing)
@@ -132,20 +132,13 @@ public class SpecimenBehavior : MonoBehaviour
         return ret;
     }
 
-    public void ReceivePackage(Package package)
+    public bool ReceivePackage(Package package)
     {
         Channel channel = receivesVia.Contains(package.channel) ? package.channel : receivesVia.RandomElement();
         receiveBubble.SetActive(true);
         receiveBubble.GetComponent<SpriteRenderer>().color = channel.GetColor();
         receiveSymbolSpriteRenderer.sprite = thought.GetSprite();
-    }
-
-    public void ProcessPackage(Package package)
-    {
-        if (receivesVia.Contains(package.channel))
-        {
-            thought = package.thought;
-        }
+        return receivesVia.Contains(package.channel);
     }
 
     private void ClearLookingTarget()

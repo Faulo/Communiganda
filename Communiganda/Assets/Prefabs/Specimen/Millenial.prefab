@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4334126590648130}
   - component: {fileID: 212109018301324380}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RightFoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35,7 +35,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4252248625989876}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sprites
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,7 +51,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4352049963171560}
   - component: {fileID: 212524036510767870}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Symbol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67,7 +67,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4423351178540958}
   - component: {fileID: 212816934898495402}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SendBubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,7 +83,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4508122411155128}
   - component: {fileID: 212297870540325546}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LeftFoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4675766816414204}
   - component: {fileID: 212588562430324122}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,7 +115,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4486528305265914}
   - component: {fileID: 212740134010918462}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Face
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4363342783345692}
   - component: {fileID: 212780673479329838}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Symbol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,7 +147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4319033202980070}
   - component: {fileID: 212168939986312200}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Symbol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,7 +163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4594036066210618}
   - component: {fileID: 212286104030547744}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ReceiveBubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 50662334719540028}
   - component: {fileID: 61558122315190406}
   - component: {fileID: 114794396786087950}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Millenial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,7 +198,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4480981540805260}
   - component: {fileID: 212898397509478302}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ToughtBubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -284,7 +284,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1856687478531950}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.99, y: 2.68, z: 0}
+  m_LocalPosition: {x: 6.55, y: 1.79, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4252248625989876}
@@ -430,8 +430,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   engagesWith: 01000000
-  sendsVia: 00000000
-  receivesVia: 01000000
+  sendsVia: 0000000001000000
+  receivesVia: 00000000
   moveDuration: 0.1
 --- !u!114 &114794396786087950
 MonoBehaviour:

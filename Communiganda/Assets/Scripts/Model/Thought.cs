@@ -13,28 +13,20 @@ public enum Thought {
 
 static class ThoughtExtensions
 {
-    public static string GetText(this Thought thought)
-    {
-        switch (thought)
-        {
-            case Thought.Nothing: return "";
-            case Thought.Danger: return "🕳";
-            case Thought.Money: return "💰";
-            case Thought.Food: return "🍽";
-            case Thought.Love: return "❤";
-            default: throw new ArgumentOutOfRangeException("thought");
-        }
-    }
+    private static Sprite[] sprites = new[] {
+        null,
+        Resources.Load<Sprite>("Thoughts/symbol_hole"),
+        Resources.Load<Sprite>("Thoughts/symbol_money"),
+        Resources.Load<Sprite>("Thoughts/symbol_hunger"),
+        Resources.Load<Sprite>("Thoughts/symbol_heart")
+    };
     public static Sprite GetSprite(this Thought thought)
     {
-        switch (thought)
-        {
-            case Thought.Nothing: return null;
-            case Thought.Danger: return Resources.Load<Sprite>("Thoughts/symbol_hole");
-            case Thought.Money: return Resources.Load<Sprite>("Thoughts/symbol_money");
-            case Thought.Food: return Resources.Load<Sprite>("Thoughts/symbol_hunger");
-            case Thought.Love: return Resources.Load<Sprite>("Thoughts/symbol_heart");
-            default: throw new ArgumentOutOfRangeException("thought");
-        }
+        return sprites[(int) thought];
+    }
+    public static void Battle(this Thought thought, SpecimenBehavior sender, SpecimenBehavior receiver)
+    {
+        receiver.thought = new[] { sender.thought, receiver.thought }.RandomElement();
+        sender.thought = new[] { sender.thought, receiver.thought }.RandomElement();
     }
 }

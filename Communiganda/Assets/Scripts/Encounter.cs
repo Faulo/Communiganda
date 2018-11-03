@@ -25,13 +25,12 @@ public static class Encounter
 
         yield return new WaitForSeconds(0.5f);
 
-        receiver.ReceivePackage(package);
+        if (receiver.ReceivePackage(package)) {
+            yield return new WaitForSeconds(0.5f);
+            package.thought.Battle(sender, receiver);
+        }
 
         yield return new WaitForSeconds(0.5f);
-
-        receiver.ProcessPackage(package);
-
-        yield return new WaitForSeconds(1f);
 
         sender.FinishEncounter();
         receiver.FinishEncounter();
