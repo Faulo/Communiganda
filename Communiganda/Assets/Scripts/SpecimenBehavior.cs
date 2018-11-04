@@ -280,7 +280,7 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
     {
         state = State.Trapped;
         thought = Thought.Danger;
-        transform.position = target.position;
+        transform.position = target.position + new Vector3(UnityEngine.Random.Range(-0.4f, 0.4f), UnityEngine.Random.Range(-0.1f, 0.5f));
         AudioManager.instance.PlaySound("FallingIntoHole");
     }
 
