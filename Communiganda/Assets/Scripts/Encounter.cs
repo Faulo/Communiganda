@@ -27,7 +27,11 @@ public static class Encounter
 
         if (receiver.ReceivePackage(package)) {
             yield return new WaitForSeconds(0.5f);
-            package.thought.Battle(sender, receiver);
+            IEnumerator thoughts = sender.ApplyThoughtRoutine(package.thought, receiver);
+            while (thoughts.MoveNext())
+            {
+                yield return thoughts.Current;
+            }
         }
 
         yield return new WaitForSeconds(0.5f);
