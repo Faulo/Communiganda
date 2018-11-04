@@ -19,15 +19,20 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
     [SerializeField] private Channel[] sendsVia;
     [SerializeField] private Channel[] receivesVia;
     [SerializeField] private float moveDuration = 0.1f;
-    
+
+    [SerializeField] private AnimationCurve encounterAnimationCurve;
+
     private Thought _thought;
-    public Thought thought {
-        set {
+    public Thought thought
+    {
+        set
+        {
             _thought = value;
             if (thought == Thought.Nothing)
             {
                 thoughtBubble.SetActive(false);
-            } else
+            }
+            else
             {
                 thoughtBubble.SetActive(true);
             }
@@ -47,7 +52,12 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
     private SpriteRenderer receiveSymbolSpriteRenderer;
     private Transform lookingTarget;
 
-    void Start ()
+    private Transform bodyTransform;
+    private SpriteRenderer leftFootSpriteRenderer;
+    private SpriteRenderer rightFootSpriteRenderer;
+
+
+    void Start()
     {
         face = transform.Find("Sprites").Find("Face").gameObject;
         thoughtBubble = transform.Find("Sprites").Find("ToughtBubble").gameObject;
@@ -59,12 +69,18 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
         receiveBubble = transform.Find("Sprites").Find("SendBubble").gameObject;
         receiveSymbolSpriteRenderer = receiveBubble.transform.Find("Symbol").GetComponent<SpriteRenderer>();
 
-        thought = new[] { Thought.Nothing, Thought.Nothing, Thought.Nothing, Thought.Love, Thought.Money , Thought.Food }.RandomElement();
+        bodyTransform = transform.Find("Sprites").Find("Body");
+        leftFootSpriteRenderer = transform.Find("Sprites").Find("LeftFoot").GetComponent<SpriteRenderer>();
+        rightFootSpriteRenderer = transform.Find("Sprites").Find("RightFoot").GetComponent<SpriteRenderer>();
+
+        thought = new[] { Thought.Nothing, Thought.Nothing, Thought.Nothing, Thought.Love, Thought.Money, Thought.Food }.RandomElement();
 
         ClearLookingTarget();
+        StartCoroutine(WalkingAnimation());
     }
 
-    void Update () {
+    void Update()
+    {
         UpdateFace();
         if (CanWalk())
         {
@@ -87,7 +103,8 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
     {
         GameObject other = collision.gameObject;
         SpecimenBehavior npc = other.GetComponent<SpecimenBehavior>();
-        if (npc != null) {
+        if (npc != null)
+        {
             if (this.CanEncounter(npc) && npc.CanEncounter(this) && engagesWith.Contains(npc.id))
             {
                 this.AbortAction();
@@ -104,9 +121,12 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
             FinishEncounter();
             lastEncounter.AbortAction();
         }
-        if (state != State.Trapped) {
+        if (state != State.Trapped)
+        {
             state = State.Idle;
         }
+        StartCoroutine(WalkingAnimation());
+
     }
 
     public IEnumerator MoveToPositionRoutine(Vector2 to)
@@ -119,7 +139,6 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
     private IEnumerator MovementRoutine()
     {
         state = State.Walking;
-
         Point _from = pathfindingGrid.ConvertPositionToPoint(new Vector2(transform.position.x, transform.position.y));
         Point _to = pathfindingGrid.GenerateRandomTargetPointInsideGrid();
 
@@ -196,6 +215,8 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
         lastEncounter = npc;
         state = State.Talking;
         SetLookingTarget(npc.GetTransform());
+        Utility.instance.ScaleGameObject(transform, new Vector3(2, 2, 2), .3f, encounterAnimationCurve);
+        AudioManager.instance.PlaySound("Encounter");
     }
     public void FinishEncounter()
     {
@@ -231,4 +252,22 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
     {
         this.thought = thought;
     }
+
+    private IEnumerator WalkingAnimation()
+    {
+        while (true)
+        {
+            if (state == State.Walking)
+            {
+                leftFootSpriteRenderer.flipY = !leftFootSpriteRenderer.flipY;
+                rightFootSpriteRenderer.flipY = !rightFootSpriteRenderer.flipY;
+                yield return new WaitForSeconds(.1f);
+            }
+
+            yield return null;
+        }
+    }
+
+
+
 }

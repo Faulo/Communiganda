@@ -21,7 +21,7 @@ public class PathfindingGrid : MonoBehaviour
         Instance = this;
         SetEdgeColliders();
         backgroundTransform.position = new Vector3((width / 2f) - .5f, (height / 2) - .5f, 0);
-        backgroundTransform.localScale = new Vector3(width, height, 0);
+      //  backgroundTransform.localScale = new Vector3(width, height, 0);
     }
 
     void Start()
@@ -38,10 +38,6 @@ public class PathfindingGrid : MonoBehaviour
                 else tilesmap[x, y] = true;
             }
         }
-        //tilesmap[1, 0] = false;
-        //tilesmap[1, 1] = false;
-        //tilesmap[1, 2] = false;
-        //tilesmap[1, 3] = false;
         Grid = new NesScripts.Controls.PathFind.Grid(tilesmap);
         Camera.main.transform.position = Vector3.zero + new Vector3((width - 1) / 2, (height - 1) / 2f, -100f);
     }

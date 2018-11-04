@@ -8,6 +8,8 @@ public class Player : MonoBehaviour, IEncounterable
 {
     [SerializeField] private float moveSpeed = 10;
     [SerializeField] private float speechAttackRadius = 3f;
+    [SerializeField] private AnimationCurve speechAttackAnimationCurve;
+
     private bool moving = false;
 
     private PathfindingGrid pathfindingGrid { get { return PathfindingGrid.Instance; } }
@@ -95,6 +97,7 @@ public class Player : MonoBehaviour, IEncounterable
             this.AbortAction();
             npc.AbortAction();
             speechAttackRoutine = StartCoroutine(Encounter.Create(this, npc));
+            Utility.instance.ScaleGameObject(transform, new Vector3(2, 2, 2), .3f, speechAttackAnimationCurve);
         }
     }
 
@@ -172,7 +175,8 @@ public class Player : MonoBehaviour, IEncounterable
         ClearLookingTarget();
         sendBubble.SetActive(false);
 
-        if (speechAttackRoutine != null) {
+        if (speechAttackRoutine != null)
+        {
             StopCoroutine(speechAttackRoutine);
             speechAttackRoutine = null;
         }

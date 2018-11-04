@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DangerBehavior : MonoBehaviour {
+public class DangerBehavior : MonoBehaviour
+{
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    [SerializeField] private float animationDuration = .5f;
+    [SerializeField] private AnimationCurve animationCurve;
+
+    [SerializeField] private Vector3 maxScale;
+
+    private Coroutine animationRoutine;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -25,6 +23,8 @@ public class DangerBehavior : MonoBehaviour {
             if (npc.thought != Thought.Danger)
             {
                 npc.TrapIn(transform);
+                if (animationRoutine != null) StopCoroutine(animationRoutine);
+                animationRoutine = StartCoroutine(Utility.instance.ScaleGameObjectRoutine(transform, maxScale, animationDuration, animationCurve));
             }
         }
     }

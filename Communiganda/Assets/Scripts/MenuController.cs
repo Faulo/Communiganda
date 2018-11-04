@@ -28,7 +28,6 @@ public class MenuController : MonoBehaviour
         fadeInOutImage.color = Color.black;
         fadeInOutImage.enabled = true;
         titleText.fontSharedMaterial.DisableKeyword("GLOW_ON");
-
     }
 
     void Start()
@@ -44,22 +43,15 @@ public class MenuController : MonoBehaviour
             StopAllCoroutines();
             StartCoroutine(StartGame());
         }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            AudioManager.instance.PlayRandomSound("Mumble");
-        }
     }
 
     private IEnumerator Intro()
     {
+        StartCoroutine(WriteTitleText());
         AudioManager.instance.GetAudioSource("MusicMenu").volume = 0f;
         AudioManager.instance.FadeToAudioCostum("MusicMenu", AudioManager.instance.GetOriginalVolume("MusicMenu"), 2f, false);
         yield return StartCoroutine(Utility.instance.LerpColorRoutine(fadeInOutImage, transparent, titleTextDelay, false, fadeInAnimationCurve));
-        for (int i = 0; i < titleTextString.Length; i++)
-        {
-            titleText.text += titleTextString[i];
-            yield return new WaitForSeconds(titleTextIntervall);
-        }
+
         yield return new WaitForSeconds(1f);
         canStartGame = true;
         while (true)
@@ -96,6 +88,26 @@ public class MenuController : MonoBehaviour
             textMat.SetFloat("_GlowInner", value);
             textMat.SetFloat("_GlowOuter", value);
             yield return new WaitForFixedUpdate();
+        }
+    }
+
+    private IEnumerator WriteTitleText()
+    {
+        while (true)
+        {
+            for (int i = 0; i < titleTextString.Length; i++)
+            {
+                titleText.text += titleTextString[i];
+                yield return new WaitForSeconds(titleTextIntervall);
+            }
+            string tempString = titleTextString;
+            for (int i = 0; i < titleTextString.Length; i++)
+            {
+                if (tempString.Length < 1) break;
+                tempString = tempString.Remove(0,1);
+                titleText.text = tempString;
+                yield return new WaitForSeconds(titleTextIntervall);
+            }
         }
     }
 }

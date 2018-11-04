@@ -121,13 +121,13 @@ public class AudioManager : MonoBehaviour
         oneShotSource.PlayOneShot(clip, volume);
     }
 
-    public void PlayRandomSound(string soundContainerName)
+    public void PlayRandomSound(string soundContainerName, float volume = 1f)
     {
         SoundContainer soundContainer = Array.Find(soundContainers, cont => cont.name == soundContainerName);
         if (soundContainer != null)
         {
-            int randomIndex = UnityEngine.Random.Range(0, soundContainer.sounds.Length);
-            oneShotSource.PlayOneShot(soundContainer.sounds[randomIndex].clip);
+            int randomIndex = UnityEngine.Random.Range(0, soundContainer.clips.Length);
+            oneShotSource.PlayOneShot(soundContainer.clips[randomIndex], volume);
         }
         else Debug.LogError("Cannot find sound container with name " + soundContainerName);
     }

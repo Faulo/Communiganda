@@ -28,5 +28,6 @@ public class Sound
 public class SoundContainer
 {
     public string name;
+    public AudioClip[] clips;
     public Sound[] sounds;
 }
