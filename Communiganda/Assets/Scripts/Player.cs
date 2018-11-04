@@ -209,7 +209,7 @@ public class Player : MonoBehaviour, IEncounterable
     {
         receiver.SetThought(senderThought);
 
-        yield return new WaitForSeconds(0.5f);
+        yield return null;
     }
 
     public void SetWalkingTarget(Transform target)

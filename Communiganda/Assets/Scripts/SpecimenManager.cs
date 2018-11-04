@@ -26,7 +26,7 @@ public class SpecimenManager : MonoBehaviour {
         while (true)
         {
             SpawnSpecimen(Vector3.zero, Vector3.zero);
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(5);
         }
     }
 }
