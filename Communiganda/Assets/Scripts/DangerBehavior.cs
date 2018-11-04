@@ -22,7 +22,6 @@ public class DangerBehavior : MonoBehaviour
 
             if (npc.thought != Thought.Danger)
             {
-                AudioManager.instance.PlaySound("FallingIntoHole", .15f);
                 npc.TrapIn(transform);
                 if (animationRoutine != null)
                 {
