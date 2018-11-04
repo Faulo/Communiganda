@@ -50,7 +50,9 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
     private SpriteRenderer sendSymbolSpriteRenderer;
     private GameObject receiveBubble;
     private SpriteRenderer receiveSymbolSpriteRenderer;
+
     private Transform lookingTarget;
+    private Transform walkingTarget;
 
     private Transform bodyTransform;
     private SpriteRenderer leftFootSpriteRenderer;
@@ -140,7 +142,15 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
     {
         state = State.Walking;
         Point _from = pathfindingGrid.ConvertPositionToPoint(new Vector2(transform.position.x, transform.position.y));
-        Point _to = pathfindingGrid.GenerateRandomTargetPointInsideGrid();
+        Point _to;
+        if (walkingTarget == null)
+        {
+            _to = pathfindingGrid.GenerateRandomTargetPointInsideGrid();
+        } else
+        {
+            _to = pathfindingGrid.ConvertPositionToPoint(new Vector2(walkingTarget.position.x, walkingTarget.position.y)); ;
+            walkingTarget = null;
+        }
 
         IEnumerator routine = Utility.instance.MoveToWaypointsRoutine(transform, moveDuration, null, pathfindingGrid.GetWaypoints(_from, _to));
         yield return StartCoroutine(routine);
@@ -179,6 +189,11 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
     private void SetLookingTarget(Transform target)
     {
         lookingTarget = target;
+    }
+    public void SetWalkingTarget(Transform target)
+    {
+        walkingTarget = target;
+        SetLookingTarget(target);
     }
 
     public bool CanWalk()
@@ -253,6 +268,7 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
         this.thought = thought;
     }
 
+
     private IEnumerator WalkingAnimation()
     {
         while (true)
@@ -269,5 +285,45 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
     }
 
 
+    public IEnumerator ApplyThoughtRoutine(Thought senderThought, IEncounterable receiver)
+    {
+        Thought receiverThought = receiver.GetThought();
 
+        if (senderThought == receiverThought)
+        {
+            switch (senderThought)
+            {
+                case Thought.Danger:
+                    Transform danger = FindObjectsOfType<DangerBehavior>().RandomElement().gameObject.transform;
+                    SetWalkingTarget(danger);
+                    receiver.SetWalkingTarget(danger);
+                    yield return new WaitForSeconds(0.1f);
+                    break;
+                case Thought.Food:
+                case Thought.Love:
+                case Thought.Money:
+                case Thought.Nothing:
+                    break;
+            }
+        } else
+        {
+            if (HasThought())
+            {
+                if (receiver.HasThought())
+                {
+                    var thoughts = new[] { receiverThought, senderThought };
+                    SetThought(thoughts.RandomElement());
+                    receiver.SetThought(thoughts.RandomElement());
+                } else
+                {
+                    receiver.SetThought(senderThought);
+                }
+            } else 
+            {
+                SetThought(receiverThought);
+            }
+        }
+
+        yield return null;
+    }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public interface IEncounterable {
@@ -15,4 +14,7 @@ public interface IEncounterable {
 
     Package CreatePackage();
     bool ReceivePackage(Package package);
+    IEnumerator ApplyThoughtRoutine(Thought senderThought, IEncounterable receiver);
+
+    void SetWalkingTarget(Transform target);
 }

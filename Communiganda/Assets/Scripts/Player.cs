@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using NesScripts.Controls.PathFind;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -198,5 +199,17 @@ public class Player : MonoBehaviour, IEncounterable
     public bool ReceivePackage(Package package)
     {
         throw new System.NotImplementedException();
+    }
+
+    public IEnumerator ApplyThoughtRoutine(Thought senderThought, IEncounterable receiver)
+    {
+        receiver.SetThought(senderThought);
+
+        yield return null;
+    }
+
+    public void SetWalkingTarget(Transform target)
+    {
+        throw new NotImplementedException();
     }
 }
