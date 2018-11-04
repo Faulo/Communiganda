@@ -230,7 +230,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &92841962
 Prefab:
@@ -462,7 +462,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &498707163 stripped
 RectTransform:
@@ -673,7 +673,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &698465959
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -728,10 +728,10 @@ Transform:
   m_GameObject: {fileID: 698465958}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 100, y: 100, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &703158054
 GameObject:
@@ -757,7 +757,7 @@ RectTransform:
   m_GameObject: {fileID: 703158054}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 1696277867}
   - {fileID: 498707163}
@@ -853,6 +853,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 756459486}
+  - component: {fileID: 756459487}
   m_Layer: 8
   m_Name: NPCs
   m_TagString: Untagged
@@ -882,6 +883,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &756459487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 756459485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a4b60df3d68d3047a6af1dcf76eae28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  specimenPrefabs:
+  - {fileID: 1856687478531950, guid: 648e963570169d747a6c755b0b403f4b, type: 2}
+  - {fileID: 1561052627354934, guid: e9b43cef9281f004f84123b60e66fd9c, type: 2}
+  - {fileID: 1863397645235684, guid: d2d8e3a494223434ba6569ee50eaca7b, type: 2}
 --- !u!1 &763925252
 GameObject:
   m_ObjectHideFlags: 0
@@ -997,12 +1013,38 @@ MonoBehaviour:
     spatialBlend: 0
     maxRange: 0
     sourceObject: {fileID: 0}
-  - name: Encounter
+  - name: EncounterTrigger
     source: {fileID: 0}
     mixerGroup: {fileID: 0}
     clip: {fileID: 8300000, guid: 2df867c474e386a41b320e16f1a446b9, type: 3}
-    volume: 0.1
+    volume: 0.01
     pitch: 1
+    loop: 0
+    playOnAwake: 0
+    ignoreGamePaused: 0
+    threeDSound: 0
+    spatialBlend: 0
+    maxRange: 0
+    sourceObject: {fileID: 0}
+  - name: NPCEatingNPC
+    source: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    clip: {fileID: 8300000, guid: 9434980dac3066c4c932cbfa12074b74, type: 3}
+    volume: 0.9
+    pitch: 0.75
+    loop: 0
+    playOnAwake: 0
+    ignoreGamePaused: 0
+    threeDSound: 0
+    spatialBlend: 0
+    maxRange: 0
+    sourceObject: {fileID: 0}
+  - name: SpawnNewNPC
+    source: {fileID: 0}
+    mixerGroup: {fileID: 0}
+    clip: {fileID: 8300000, guid: a255160d566d7cb40bf7c68bb8477eed, type: 3}
+    volume: 0.5
+    pitch: 1.5
     loop: 0
     playOnAwake: 0
     ignoreGamePaused: 0
@@ -1017,10 +1059,6 @@ MonoBehaviour:
     - {fileID: 8300000, guid: b018a812001c2814bb73bc40fc1c1656, type: 3}
     - {fileID: 8300000, guid: 37bda0da59935eb4b9f46683913562e6, type: 3}
     - {fileID: 8300000, guid: dcb1c0ecf1aac6e43a2528e3c93b7f7e, type: 3}
-    - {fileID: 8300000, guid: b567a829bb06f6348bd6fc0b2901f747, type: 3}
-    - {fileID: 8300000, guid: 2566754394697614cac7f6e81daa3e28, type: 3}
-    - {fileID: 8300000, guid: f5234e0c4c02f2a4383d033bfa3f3fa0, type: 3}
-    - {fileID: 8300000, guid: c19d191e5f3729c4f87c64d2098edd7b, type: 3}
     sounds:
     - name: Mumble0
       source: {fileID: 0}
@@ -1790,7 +1828,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4969849153365978, guid: 24009f50f13f3474c96ddf98a8016047, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114674319135949802, guid: 24009f50f13f3474c96ddf98a8016047,
         type: 2}
@@ -1933,7 +1971,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1486547045
 Prefab:
@@ -2033,7 +2071,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1508044362
 Transform:
   m_ObjectHideFlags: 0

@@ -12,7 +12,17 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
 
     private static System.Random random = new System.Random();
 
-    private static PathfindingGrid pathfindingGrid { get { return PathfindingGrid.Instance; } }
+    private static PathfindingGrid pathfindingGrid {
+        get {
+            return PathfindingGrid.Instance;
+        }
+    }
+
+    private SpecimenManager manager {
+        get {
+            return GetComponentInParent<SpecimenManager>();
+        }
+    }
 
     [SerializeField] private Specimen id;
     [SerializeField] private Specimen[] engagesWith;
@@ -42,6 +52,8 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
     }
 
     private State state = State.Idle;
+    private bool isDying = false;
+
     private IEncounterable lastEncounter;
     private GameObject face;
     private GameObject thoughtBubble;
@@ -75,7 +87,8 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
         leftFootSpriteRenderer = transform.Find("Sprites").Find("LeftFoot").GetComponent<SpriteRenderer>();
         rightFootSpriteRenderer = transform.Find("Sprites").Find("RightFoot").GetComponent<SpriteRenderer>();
 
-        thought = new[] { Thought.Nothing, Thought.Nothing, Thought.Nothing, Thought.Love, Thought.Money, Thought.Food }.RandomElement();
+        //thought = new[] { Thought.Nothing, Thought.Nothing, Thought.Nothing, Thought.Love, Thought.Money, Thought.Food }.RandomElement();
+        //thought = Thought.Food;
 
         ClearLookingTarget();
         StartCoroutine(WalkingAnimation());
@@ -83,7 +96,12 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
 
     void Update()
     {
+        if (CanDie())
+        {
+            Destroy(gameObject);
+        }
         UpdateFace();
+        UpdateScale();
         if (CanWalk())
         {
             AbortAction();
@@ -99,6 +117,13 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
         y = Mathf.Clamp(y, -0.25f, 0.25f);
 
         face.transform.localPosition = new Vector2(x, y);
+    }
+    private void UpdateScale()
+    {
+        if (transform.localScale.z < 1.0f)
+        {
+            transform.localScale += Time.deltaTime * Vector3.one * 0.1f;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -170,6 +195,8 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
         sendBubble.GetComponent<SpriteRenderer>().color = ret.channel.GetColor();
         sendSymbolSpriteRenderer.sprite = ret.thought.GetSprite();
 
+        AudioManager.instance.PlayRandomSound("Mumble", 0.5f);
+
         return ret;
     }
 
@@ -179,6 +206,9 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
         receiveBubble.SetActive(true);
         receiveBubble.GetComponent<SpriteRenderer>().color = channel.GetColor();
         receiveSymbolSpriteRenderer.sprite = thought.GetSprite();
+
+        AudioManager.instance.PlayRandomSound("Mumble", 0.5f);
+
         return receivesVia.Contains(package.channel);
     }
 
@@ -211,13 +241,18 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
         }
     }
 
+    public bool CanDie()
+    {
+        return isDying && state == State.Idle;
+    }
+
     private bool CanEncounter(SpecimenBehavior npc)
     {
         switch (state)
         {
             case State.Idle:
             case State.Walking:
-                return !npc.Equals(lastEncounter) && npc.thought != thought;
+                return !npc.Equals(lastEncounter);
             case State.Talking:
             case State.Trapped:
                 return false;
@@ -231,7 +266,7 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
         state = State.Talking;
         SetLookingTarget(npc.GetTransform());
         Utility.instance.ScaleGameObject(transform, new Vector3(2, 2, 2), .3f, encounterAnimationCurve);
-        AudioManager.instance.PlaySound("Encounter");
+        AudioManager.instance.PlaySound("EncounterTrigger");
     }
     public void FinishEncounter()
     {
@@ -285,7 +320,7 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
     }
 
 
-    public IEnumerator ApplyThoughtRoutine(Thought senderThought, IEncounterable receiver)
+    public IEnumerator ApplyThoughtRoutine(Thought senderThought, SpecimenBehavior receiver)
     {
         Thought receiverThought = receiver.GetThought();
 
@@ -297,12 +332,47 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
                     Transform danger = FindObjectsOfType<DangerBehavior>().RandomElement().gameObject.transform;
                     SetWalkingTarget(danger);
                     receiver.SetWalkingTarget(danger);
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitForSeconds(0.25f);
                     break;
                 case Thought.Food:
+                    IEnumerator foodSteps = receiver.MoveToPositionRoutine(new Vector2(transform.position.x + 0.5f, transform.position.y));
+                    while (foodSteps.MoveNext())
+                    {
+                        yield return foodSteps.Current;
+                    }
+                    AudioManager.instance.PlaySound("NPCEatingNPC");
+                    while (transform.localScale.z > 0)
+                    {
+                        transform.localScale -= 0.1f * Vector3.one;
+                        yield return new WaitForSeconds(0.1f);
+                    }
+                    transform.Find("Sprites").gameObject.SetActive(false);
+                    isDying = true;
+                    receiver.SetThought(Thought.Nothing);
+                    yield return new WaitForSeconds(0.25f);
+                    break;
                 case Thought.Love:
+                    IEnumerator loveSteps = receiver.MoveToPositionRoutine(new Vector2(transform.position.x + 1f, transform.position.y));
+                    while (loveSteps.MoveNext())
+                    {
+                        yield return loveSteps.Current;
+                    }
+                    //@TODO play love-making sound here
+                    yield return new WaitForSeconds(1.0f);
+                    AudioManager.instance.PlaySound("SpawnNewNPC");
+                    manager.SpawnSpecimen(transform.position + new Vector3(0, 0.5f, 0), transform.localScale);
+                    SetThought(Thought.Nothing);
+                    receiver.SetThought(Thought.Nothing);
+                    yield return new WaitForSeconds(0.5f);
+                    break;
                 case Thought.Money:
+                    //@TODO ?
+                    SetThought(Thought.Nothing);
+                    receiver.SetThought(Thought.Nothing);
+                    break;
                 case Thought.Nothing:
+                    new[] { this, receiver }.RandomElement().SetThought(new[] { Thought.Love, Thought.Money, Thought.Food }.RandomElement());
+                    yield return new WaitForSeconds(0.25f);
                     break;
             }
         } else
@@ -323,7 +393,6 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
                 SetThought(receiverThought);
             }
         }
-
-        yield return null;
+        yield return new WaitForSeconds(0.5f);
     }
 }

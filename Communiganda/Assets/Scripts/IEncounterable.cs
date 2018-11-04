@@ -14,7 +14,7 @@ public interface IEncounterable {
 
     Package CreatePackage();
     bool ReceivePackage(Package package);
-    IEnumerator ApplyThoughtRoutine(Thought senderThought, IEncounterable receiver);
+    IEnumerator ApplyThoughtRoutine(Thought senderThought, SpecimenBehavior receiver);
 
     void SetWalkingTarget(Transform target);
 }

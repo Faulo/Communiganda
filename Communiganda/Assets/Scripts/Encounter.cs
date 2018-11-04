@@ -23,18 +23,19 @@ public static class Encounter
 
         var package = sender.CreatePackage();
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.8f);
 
-        if (receiver.ReceivePackage(package)) {
-            yield return new WaitForSeconds(0.5f);
+        bool communicationSuccessful = receiver.ReceivePackage(package);
+
+        yield return new WaitForSeconds(0.8f);
+
+        if (communicationSuccessful) {
             IEnumerator thoughts = sender.ApplyThoughtRoutine(package.thought, receiver);
             while (thoughts.MoveNext())
             {
                 yield return thoughts.Current;
             }
         }
-
-        yield return new WaitForSeconds(0.5f);
 
         sender.FinishEncounter();
         receiver.FinishEncounter();

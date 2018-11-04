@@ -201,11 +201,11 @@ public class Player : MonoBehaviour, IEncounterable
         throw new System.NotImplementedException();
     }
 
-    public IEnumerator ApplyThoughtRoutine(Thought senderThought, IEncounterable receiver)
+    public IEnumerator ApplyThoughtRoutine(Thought senderThought, SpecimenBehavior receiver)
     {
         receiver.SetThought(senderThought);
 
-        yield return null;
+        yield return new WaitForSeconds(0.5f);
     }
 
     public void SetWalkingTarget(Transform target)
