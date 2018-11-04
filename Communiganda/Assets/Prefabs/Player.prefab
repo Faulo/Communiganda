@@ -304,7 +304,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1514498328868280}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.99, y: 10.39, z: 0}
+  m_LocalPosition: {x: 10.91, y: 10.39, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4941764336214710}
@@ -367,7 +367,7 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 9.55
+  m_Intensity: 1.5
   m_Range: 2.3
   m_SpotAngle: 35.1
   m_CookieSize: 10
@@ -418,10 +418,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 500
   speechAttackRadius: 2
+  speechAttackAnimationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: 0.5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   leftFoodSpriteRend: {fileID: 212299477554150608}
   rightFootSpriteRend: {fileID: 212485524541056816}
   faceSpriteRend: {fileID: 212937603963218548}
   hatSpriteRend: {fileID: 212706630703337574}
+  bodySpriteRend: {fileID: 212520312084298614}
   npcLayer:
     serializedVersion: 2
     m_Bits: 256

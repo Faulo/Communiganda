@@ -2,7 +2,7 @@
 using UnityEditor;
 using System.Collections;
 
-public static class Encounter 
+public static class Encounter
 {
     public static IEnumerator Create(IEncounterable sender, SpecimenBehavior receiver)
     {
@@ -22,10 +22,10 @@ public static class Encounter
         yield return new WaitForSeconds(0.5f);
 
         var package = sender.CreatePackage();
-
         yield return new WaitForSeconds(0.5f);
 
-        if (receiver.ReceivePackage(package)) {
+        if (receiver.ReceivePackage(package))
+        {
             yield return new WaitForSeconds(0.5f);
             IEnumerator thoughts = sender.ApplyThoughtRoutine(package.thought, receiver);
             while (thoughts.MoveNext())

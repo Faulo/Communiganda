@@ -23,6 +23,8 @@ public class Player : MonoBehaviour, IEncounterable
     [SerializeField] private SpriteRenderer rightFootSpriteRend;
     [SerializeField] private SpriteRenderer faceSpriteRend;
     [SerializeField] private SpriteRenderer hatSpriteRend;
+    [SerializeField] private SpriteRenderer bodySpriteRend;
+
     [SerializeField] private LayerMask npcLayer;
 
     private Coroutine speechAttackRoutine;
@@ -115,8 +117,8 @@ public class Player : MonoBehaviour, IEncounterable
                 rightFootSpriteRend.flipY = !rightFootSpriteRend.flipY;
                 //faceSpriteRend.transform.localPosition = faceDefaultPos + (input * .1f);
                 float angle = UnityEngine.Random.Range(-10f, 10f);
-                Quaternion[] hatRotations = new Quaternion[] { Quaternion.Euler(0, 0, angle), Quaternion.Euler(0, 0, -angle) };
-                hatSpriteRend.transform.localRotation = hatRotations[hatRotationCounter % hatRotations.Length];
+                Quaternion[] hatRotations = new Quaternion[] { Quaternion.Euler(0, 0, -9f), Quaternion.Euler(0, 0, 9f) };
+                bodySpriteRend.transform.localRotation = hatRotations[hatRotationCounter % hatRotations.Length];
                 hatRotationCounter++;
                 yield return new WaitForSeconds(.1f);
             }

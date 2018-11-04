@@ -169,6 +169,7 @@ MonoBehaviour:
     sourceObject: {fileID: 0}
   soundContainers:
   - name: Mumble
+    clips: []
     sounds:
     - name: Mumble0
       source: {fileID: 0}
@@ -897,7 +898,7 @@ MonoBehaviour:
   titleText: {fileID: 1123407416}
   titleTextString: Communiganda
   titleTextDelay: 3
-  titleTextIntervall: 0.05
+  titleTextIntervall: 0.075
   anyKeyText: {fileID: 187488335}
   anyKeyFadeInOutCurve:
     serializedVersion: 2

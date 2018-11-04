@@ -22,8 +22,13 @@ public class DangerBehavior : MonoBehaviour
 
             if (npc.thought != Thought.Danger)
             {
+                AudioManager.instance.PlaySound("FallingIntoHole", .15f);
                 npc.TrapIn(transform);
-                if (animationRoutine != null) StopCoroutine(animationRoutine);
+                if (animationRoutine != null)
+                {
+                    StopCoroutine(animationRoutine);
+                    transform.localScale = Vector3.one;
+                }
                 animationRoutine = StartCoroutine(Utility.instance.ScaleGameObjectRoutine(transform, maxScale, animationDuration, animationCurve));
             }
         }
