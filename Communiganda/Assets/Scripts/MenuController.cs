@@ -63,6 +63,7 @@ public class MenuController : MonoBehaviour
 
     private IEnumerator StartGame()
     {
+        titleText.text = titleTextString;
         StartCoroutine(AnimateTextGlow());
         StartCoroutine(AudioManager.instance.FadeOutAudioCostumRoutine("MusicMenu", .5f));
         AudioManager.instance.PlaySound("StartGame");

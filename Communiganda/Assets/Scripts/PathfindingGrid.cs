@@ -20,7 +20,7 @@ public class PathfindingGrid : MonoBehaviour
     {
         Instance = this;
         SetEdgeColliders();
-        backgroundTransform.position = new Vector3((width / 2f) - .5f, (height / 2) - .5f, 0);
+       // backgroundTransform.position = new Vector3((width / 2f) - .5f, (height / 2) - .5f, 0);
       //  backgroundTransform.localScale = new Vector3(width, height, 0);
     }
 
