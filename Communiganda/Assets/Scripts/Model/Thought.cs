@@ -24,24 +24,18 @@ static class ThoughtExtensions
     {
         return sprites[(int) thought];
     }
-    public static void Battle(this Thought thought, SpecimenBehavior sender, SpecimenBehavior receiver)
+    public static void Battle(this Thought thought, IEncounterable sender, IEncounterable receiver)
     {
-        if (receiver.thought == Thought.Nothing)
+        if (!receiver.HasThought())
         {
-            receiver.thought = thought;
+            receiver.SetThought(sender.GetThought());
         }
-        else
+        if (!sender.HasThought())
         {
-            receiver.thought = new[] { sender.thought, receiver.thought }.RandomElement();
+            sender.SetThought(receiver.GetThought());
         }
 
-        if (sender.thought == Thought.Nothing)
-        {
-            sender.thought = thought;
-        }
-        else
-        {
-            sender.thought = new[] { sender.thought, receiver.thought }.RandomElement();
-        }
+        receiver.SetThought(new[] { sender.GetThought(), receiver.GetThought() }.RandomElement());
+        sender.SetThought(new[] { sender.GetThought(), receiver.GetThought() }.RandomElement());
     }
 }

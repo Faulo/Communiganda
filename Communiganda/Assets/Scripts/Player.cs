@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IEncounterable
 {
     [SerializeField] private float moveSpeed = 10;
     [SerializeField] private float speechAttackRadius = 3f;
@@ -13,36 +14,56 @@ public class Player : MonoBehaviour
     private Rigidbody2D body2d;
 
     private Vector2 input;
+    private GameObject face;
 
     [SerializeField] private SpriteRenderer leftFoodSpriteRend;
     [SerializeField] private SpriteRenderer rightFootSpriteRend;
     [SerializeField] private SpriteRenderer faceSpriteRend;
     [SerializeField] private SpriteRenderer hatSpriteRend;
-    [SerializeField] private SpriteRenderer speechBubbleSpriteRend;
-    [SerializeField] private SpriteRenderer speechBubbleSymbolSpriteRend;
+    [SerializeField] private LayerMask npcLayer;
 
     private Coroutine speechAttackRoutine;
 
-    public Thought playerthought;
-    [SerializeField] private Image playerThoughtImage;
-    public LayerMask npcLayer;
+    private GameObject sendBubble;
+    private SpriteRenderer sendSymbolSpriteRenderer;
+
+    public Thought thought;
+    private Transform lookingTarget;
 
     private void Awake()
     {
         body2d = GetComponentInChildren<Rigidbody2D>();
-        speechBubbleSpriteRend.enabled = false;
-        speechBubbleSymbolSpriteRend.enabled = false;
-        SetThougtSprites();
     }
 
     void Start()
     {
+        face = transform.Find("Sprites").Find("Face").gameObject;
+
+        sendBubble = transform.Find("Sprites").Find("SpeechBubble").gameObject;
+        sendSymbolSpriteRenderer = sendBubble.transform.Find("Symbol").GetComponent<SpriteRenderer>();
+
         StartCoroutine(AnimatePlayer());
+        ClearLookingTarget();
     }
 
     void Update()
     {
-        HandlePlayerInput();
+        if (speechAttackRoutine == null)
+        {
+            HandlePlayerInput();
+        }
+
+        UpdateFace();
+    }
+    private void UpdateFace()
+    {
+        var x = lookingTarget.position.x - transform.position.x;
+        x = Mathf.Clamp(x, -0.25f, 0.25f);
+
+        var y = lookingTarget.position.y - transform.position.y;
+        y = Mathf.Clamp(y, -0.25f, 0.25f);
+
+        face.transform.localPosition = new Vector2(x, y);
     }
 
     private void HandlePlayerInput()
@@ -50,35 +71,29 @@ public class Player : MonoBehaviour
         input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         moving = input.sqrMagnitude > .1f;
         body2d.velocity = input * moveSpeed * Time.deltaTime;
-        bool inSpeechAttack = speechAttackRoutine != null;
-        if (Input.GetKeyDown(KeyCode.E) && inSpeechAttack == false)
-        {
-            speechAttackRoutine = StartCoroutine(SpeechAttack());
-        }
-        bool danger = Input.GetKeyDown(KeyCode.Alpha1);
-        bool love = Input.GetKeyDown(KeyCode.Alpha2);
-        bool newInput = danger | love;
-        if (danger) playerthought = Thought.Danger;
-        else if (love) playerthought = Thought.Love;
-        if (newInput && inSpeechAttack == false)
-        {
-            SetThougtSprites();
-        }
     }
 
-    private IEnumerator SpeechAttack()
+    public void StartSpeechAttack()
     {
-        speechBubbleSpriteRend.enabled = true;
-        speechBubbleSymbolSpriteRend.enabled = true;
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, speechAttackRadius, npcLayer);
-        for (int i = 0; i < colliders.Length; i++)
+        if (speechAttackRoutine != null)
         {
-
+            return;
         }
-        yield return new WaitForSeconds(2f);
-        speechBubbleSpriteRend.enabled = false;
-        speechBubbleSymbolSpriteRend.enabled = false;
-        speechAttackRoutine = null;
+
+        AbortAction();
+
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, speechAttackRadius, npcLayer);
+        if (colliders.Length > 0)
+        {
+            Array.Sort(colliders, (c1, c2) => Vector2.Distance(c1.transform.position, transform.position).CompareTo(Vector2.Distance(c2.transform.position, transform.position)));
+            Collider2D collision = colliders[0];
+            GameObject other = collision.gameObject;
+            SpecimenBehavior npc = other.GetComponent<SpecimenBehavior>();
+
+            this.AbortAction();
+            npc.AbortAction();
+            speechAttackRoutine = StartCoroutine(Encounter.Create(this, npc));
+        }
     }
 
     private IEnumerator AnimatePlayer()
@@ -93,7 +108,7 @@ public class Player : MonoBehaviour
                 leftFoodSpriteRend.flipY = !leftFoodSpriteRend.flipY;
                 rightFootSpriteRend.flipY = !rightFootSpriteRend.flipY;
                 faceSpriteRend.transform.localPosition = faceDefaultPos + (input * .1f);
-                float angle = Random.Range(-10f, 10f);
+                float angle = UnityEngine.Random.Range(-10f, 10f);
                 Quaternion[] hatRotations = new Quaternion[] { Quaternion.Euler(0, 0, angle), Quaternion.Euler(0, 0, -angle) };
                 hatSpriteRend.transform.localRotation = hatRotations[hatRotationCounter % hatRotations.Length];
                 hatRotationCounter++;
@@ -103,15 +118,79 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void SetThougtSprites()
-    {
-        speechBubbleSymbolSpriteRend.sprite = playerthought.GetSprite();
-        //  playerThoughtImage.sprite = playerthought.GetSprite();
-    }
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, speechAttackRadius);
+    }
+
+    private void ClearLookingTarget()
+    {
+        SetLookingTarget(transform);
+    }
+    private void SetLookingTarget(Transform target)
+    {
+        lookingTarget = target;
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
+    }
+
+    public bool HasThought()
+    {
+        return thought != Thought.Nothing;
+    }
+
+    public Thought GetThought()
+    {
+        return thought;
+    }
+
+    public void SetThought(Thought thought)
+    {
+        this.thought = thought;
+    }
+
+    public void AbortAction()
+    {
+        body2d.velocity = Vector2.zero;
+        moving = false;
+        FinishEncounter();
+    }
+
+    public void PrepareEncounter(IEncounterable npc)
+    {
+        SetLookingTarget(npc.GetTransform());
+    }
+
+    public void FinishEncounter()
+    {
+        ClearLookingTarget();
+        sendBubble.SetActive(false);
+
+        if (speechAttackRoutine != null) {
+            StopCoroutine(speechAttackRoutine);
+            speechAttackRoutine = null;
+        }
+    }
+
+    public Package CreatePackage()
+    {
+        var ret = new Package();
+        ret.channel = Channel.SpokenWords;
+        ret.thought = thought;
+
+        sendBubble.SetActive(true);
+        sendBubble.GetComponent<SpriteRenderer>().color = ret.channel.GetColor();
+        sendSymbolSpriteRenderer.sprite = ret.thought.GetSprite();
+
+        return ret;
+    }
+
+    public bool ReceivePackage(Package package)
+    {
+        throw new System.NotImplementedException();
     }
 }

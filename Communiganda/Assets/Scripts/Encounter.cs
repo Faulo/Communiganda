@@ -4,16 +4,16 @@ using System.Collections;
 
 public static class Encounter 
 {
-    public static IEnumerator Create(SpecimenBehavior sender, SpecimenBehavior receiver)
+    public static IEnumerator Create(IEncounterable sender, SpecimenBehavior receiver)
     {
         sender.PrepareEncounter(receiver);
         receiver.PrepareEncounter(sender);
 
         var distance = 2f;
-        var x = receiver.transform.position.x + distance;
-        var y = receiver.transform.position.y;
+        var x = sender.GetTransform().position.x + distance;
+        var y = sender.GetTransform().position.y;
 
-        IEnumerator list = sender.MoveToPositionRoutine(new Vector2(x, y));
+        IEnumerator list = receiver.MoveToPositionRoutine(new Vector2(x, y));
         while (list.MoveNext())
         {
             yield return list.Current;

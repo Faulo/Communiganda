@@ -6,9 +6,9 @@ using NesScripts.Controls.PathFind;
 
 
 
-public class SpecimenBehavior : MonoBehaviour
+public class SpecimenBehavior : MonoBehaviour, IEncounterable
 {
-    enum State { Idle, Walking, Busy, Trapped };
+    enum State { Idle, Walking, Talking, Trapped };
 
     private static System.Random random = new System.Random();
 
@@ -37,7 +37,7 @@ public class SpecimenBehavior : MonoBehaviour
     }
 
     private State state = State.Idle;
-    private SpecimenBehavior lastSpecimen;
+    private IEncounterable lastEncounter;
     private GameObject face;
     private GameObject thoughtBubble;
     private SpriteRenderer thoughtSymbolSpriteRenderer;
@@ -47,16 +47,16 @@ public class SpecimenBehavior : MonoBehaviour
     private SpriteRenderer receiveSymbolSpriteRenderer;
     private Transform lookingTarget;
 
-    private void Start ()
+    void Start ()
     {
         face = transform.Find("Sprites").Find("Face").gameObject;
         thoughtBubble = transform.Find("Sprites").Find("ToughtBubble").gameObject;
         thoughtSymbolSpriteRenderer = thoughtBubble.transform.Find("Symbol").GetComponent<SpriteRenderer>();
 
-        sendBubble = transform.Find("Sprites").Find("SendBubble").gameObject;
+        sendBubble = transform.Find("Sprites").Find("ReceiveBubble").gameObject;
         sendSymbolSpriteRenderer = sendBubble.transform.Find("Symbol").GetComponent<SpriteRenderer>();
 
-        receiveBubble = transform.Find("Sprites").Find("ReceiveBubble").gameObject;
+        receiveBubble = transform.Find("Sprites").Find("SendBubble").gameObject;
         receiveSymbolSpriteRenderer = receiveBubble.transform.Find("Symbol").GetComponent<SpriteRenderer>();
 
         thought = new[] { Thought.Nothing, Thought.Nothing, Thought.Nothing, Thought.Love, Thought.Money , Thought.Food }.RandomElement();
@@ -64,11 +64,11 @@ public class SpecimenBehavior : MonoBehaviour
         ClearLookingTarget();
     }
 
-    private void Update () {
+    void Update () {
         UpdateFace();
         if (CanWalk())
         {
-            StopAllCoroutines();
+            AbortAction();
             StartCoroutine(MovementRoutine());
         }
     }
@@ -90,10 +90,22 @@ public class SpecimenBehavior : MonoBehaviour
         if (npc != null) {
             if (this.CanEncounter(npc) && npc.CanEncounter(this) && engagesWith.Contains(npc.id))
             {
-                this.StopAllCoroutines();
-                npc.StopAllCoroutines();
-                StartCoroutine(thought == Thought.Nothing ? Encounter.Create(npc, this) : Encounter.Create(this, npc));
+                this.AbortAction();
+                npc.AbortAction();
+                StartCoroutine(Encounter.Create(this, npc));
             }
+        }
+    }
+    public void AbortAction()
+    {
+        StopAllCoroutines();
+        if (state == State.Talking)
+        {
+            FinishEncounter();
+            lastEncounter.AbortAction();
+        }
+        if (state != State.Trapped) {
+            state = State.Idle;
         }
     }
 
@@ -157,7 +169,7 @@ public class SpecimenBehavior : MonoBehaviour
             case State.Idle:
                 return true;
             case State.Walking:
-            case State.Busy:
+            case State.Talking:
             case State.Trapped:
                 return false;
             default:
@@ -171,19 +183,19 @@ public class SpecimenBehavior : MonoBehaviour
         {
             case State.Idle:
             case State.Walking:
-                return npc != lastSpecimen && npc.thought != thought;
-            case State.Busy:
+                return !npc.Equals(lastEncounter) && npc.thought != thought;
+            case State.Talking:
             case State.Trapped:
                 return false;
             default:
                 throw new ArgumentOutOfRangeException("Unknown state: " + state);
         }
     }
-    public void PrepareEncounter(SpecimenBehavior npc)
+    public void PrepareEncounter(IEncounterable npc)
     {
-        lastSpecimen = npc;
-        state = State.Busy;
-        SetLookingTarget(npc.transform);
+        lastEncounter = npc;
+        state = State.Talking;
+        SetLookingTarget(npc.GetTransform());
     }
     public void FinishEncounter()
     {
@@ -191,5 +203,32 @@ public class SpecimenBehavior : MonoBehaviour
         ClearLookingTarget();
         sendBubble.SetActive(false);
         receiveBubble.SetActive(false);
+    }
+
+    public void TrapIn(Transform target)
+    {
+        state = State.Trapped;
+        thought = Thought.Danger;
+        transform.position = target.position;
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
+    }
+
+    public bool HasThought()
+    {
+        return thought != Thought.Nothing;
+    }
+
+    public Thought GetThought()
+    {
+        return thought;
+    }
+
+    public void SetThought(Thought thought)
+    {
+        this.thought = thought;
     }
 }
