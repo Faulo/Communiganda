@@ -121,23 +121,21 @@ public class AudioManager : MonoBehaviour
         oneShotSource.PlayOneShot(clip, volume);
     }
 
-    public void PlayRandomSound(string soundContainerName, float volume = 1f)
+    public void PlayRandomSound(string soundContainerName, float volume)
     {
-        SoundContainer soundContainer = Array.Find(soundContainers, cont => cont.name == soundContainerName);
-        if (soundContainer != null)
-        {
-            int randomIndex = UnityEngine.Random.Range(0, soundContainer.clips.Length);
-            oneShotSource.PlayOneShot(soundContainer.clips[randomIndex], volume);
-        }
-        else Debug.LogError("Cannot find sound container with name " + soundContainerName);
+        PlayRandomSound(soundContainerName, volume, 0);
     }
-    public void PlayRandomSound(string soundContainerName, float volume = 1f, float pitchRange = .1f)
+    public void PlayRandomSound(string soundContainerName, float volume, float pitchRange)
+    {
+        PlayRandomSound(soundContainerName, volume, 1f - pitchRange, 1f + pitchRange);
+    }
+    public void PlayRandomSound(string soundContainerName, float volume, float pitchMin, float pitchMax)
     {
         SoundContainer soundContainer = Array.Find(soundContainers, cont => cont.name == soundContainerName);
         if (soundContainer != null)
         {
             int randomIndex = UnityEngine.Random.Range(0, soundContainer.clips.Length);
-            oneShotSource.pitch = 1f + UnityEngine.Random.Range(-pitchRange, pitchRange);
+            oneShotSource.pitch = UnityEngine.Random.Range(pitchMin, pitchMax);
             oneShotSource.PlayOneShot(soundContainer.clips[randomIndex], volume);
         }
         else Debug.LogError("Cannot find sound container with name " + soundContainerName);

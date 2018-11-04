@@ -195,7 +195,7 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
         sendBubble.GetComponent<SpriteRenderer>().color = ret.channel.GetColor();
         sendSymbolSpriteRenderer.sprite = ret.thought.GetSprite();
 
-        AudioManager.instance.PlayRandomSound("Mumble", 0.5f);
+        AudioManager.instance.PlayRandomSound("Mumble", 0.5f, 0.2f);
 
         return ret;
     }
@@ -207,7 +207,7 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
         receiveBubble.GetComponent<SpriteRenderer>().color = channel.GetColor();
         receiveSymbolSpriteRenderer.sprite = thought.GetSprite();
 
-        AudioManager.instance.PlayRandomSound("Mumble", 0.5f);
+        AudioManager.instance.PlayRandomSound("Mumble", 0.5f, 0.2f);
 
         return receivesVia.Contains(package.channel);
     }

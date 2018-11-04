@@ -195,6 +195,8 @@ public class Player : MonoBehaviour, IEncounterable
         sendBubble.GetComponent<SpriteRenderer>().color = ret.channel.GetColor();
         sendSymbolSpriteRenderer.sprite = ret.thought.GetSprite();
 
+        AudioManager.instance.PlayRandomSound("PlayerMumble", 0.2f, 1.3f, 1.5f);
+
         return ret;
     }
 
