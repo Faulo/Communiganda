@@ -281,6 +281,7 @@ public class SpecimenBehavior : MonoBehaviour, IEncounterable
         state = State.Trapped;
         thought = Thought.Danger;
         transform.position = target.position;
+        AudioManager.instance.PlaySound("FallingIntoHole");
     }
 
     public Transform GetTransform()

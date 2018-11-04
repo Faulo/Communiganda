@@ -5,12 +5,12 @@ using UnityEngine;
 public class SpecimenManager : MonoBehaviour {
     [SerializeField] private GameObject[] specimenPrefabs;
 
-	void Start () {
-		
-	}
+	void Start ()
+    {
+        StartCoroutine(SpawnSpecimenRoutine());
+    }
 	
 	void Update () {
-		
 	}
 
     public void SpawnSpecimen(Vector3 position, Vector3 scale)
@@ -19,5 +19,14 @@ public class SpecimenManager : MonoBehaviour {
         specimen.transform.position = position;
         specimen.transform.parent = transform;
         specimen.transform.localScale = 0.5f * scale;
+    }
+
+    private IEnumerator SpawnSpecimenRoutine()
+    {
+        while (true)
+        {
+            SpawnSpecimen(Vector3.zero, Vector3.zero);
+            yield return new WaitForSeconds(1);
+        }
     }
 }
