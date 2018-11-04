@@ -57,10 +57,12 @@ public class Player : MonoBehaviour, IEncounterable
     }
     private void UpdateFace()
     {
-        var x = lookingTarget.position.x - transform.position.x;
+        Vector2 target = new Vector2(lookingTarget.position.x, lookingTarget.position.y) + body2d.velocity;
+
+        var x = target.x - transform.position.x;
         x = Mathf.Clamp(x, -0.25f, 0.25f);
 
-        var y = lookingTarget.position.y - transform.position.y;
+        var y = target.y - transform.position.y;
         y = Mathf.Clamp(y, -0.25f, 0.25f);
 
         face.transform.localPosition = new Vector2(x, y);
@@ -107,7 +109,7 @@ public class Player : MonoBehaviour, IEncounterable
             {
                 leftFoodSpriteRend.flipY = !leftFoodSpriteRend.flipY;
                 rightFootSpriteRend.flipY = !rightFootSpriteRend.flipY;
-                faceSpriteRend.transform.localPosition = faceDefaultPos + (input * .1f);
+                //faceSpriteRend.transform.localPosition = faceDefaultPos + (input * .1f);
                 float angle = UnityEngine.Random.Range(-10f, 10f);
                 Quaternion[] hatRotations = new Quaternion[] { Quaternion.Euler(0, 0, angle), Quaternion.Euler(0, 0, -angle) };
                 hatSpriteRend.transform.localRotation = hatRotations[hatRotationCounter % hatRotations.Length];
