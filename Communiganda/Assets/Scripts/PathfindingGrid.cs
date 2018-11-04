@@ -39,7 +39,7 @@ public class PathfindingGrid : MonoBehaviour
             }
         }
         Grid = new NesScripts.Controls.PathFind.Grid(tilesmap);
-        Camera.main.transform.position = Vector3.zero + new Vector3((width - 1) / 2, (height - 1) / 2f, -100f);
+       // Camera.main.transform.position = Vector3.zero + new Vector3((width - 1) / 2, (height - 1) / 2f, -100f);
     }
 
     void Update()

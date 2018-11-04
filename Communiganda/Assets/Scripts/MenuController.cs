@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
+using System.Text;
 
 public class MenuController : MonoBehaviour
 {
@@ -47,10 +49,10 @@ public class MenuController : MonoBehaviour
 
     private IEnumerator Intro()
     {
-        StartCoroutine(WriteTitleText());
         AudioManager.instance.GetAudioSource("MusicMenu").volume = 0f;
         AudioManager.instance.FadeToAudioCostum("MusicMenu", AudioManager.instance.GetOriginalVolume("MusicMenu"), 2f, false);
         yield return StartCoroutine(Utility.instance.LerpColorRoutine(fadeInOutImage, transparent, titleTextDelay, false, fadeInAnimationCurve));
+        StartCoroutine(WriteTitleText());
 
         yield return new WaitForSeconds(1f);
         canStartGame = true;
@@ -99,15 +101,16 @@ public class MenuController : MonoBehaviour
             for (int i = 0; i < titleTextString.Length; i++)
             {
                 titleText.text += titleTextString[i];
-                yield return new WaitForSeconds(titleTextIntervall);
+                yield return new WaitForSeconds(Random.Range(.05f,.25f));
             }
+            yield return new WaitForSeconds(Random.Range(0.25f, 1f));
             string tempString = titleTextString;
             for (int i = 0; i < titleTextString.Length; i++)
             {
                 if (tempString.Length < 1) break;
-                tempString = tempString.Remove(0,1);
+                tempString = tempString.Remove(0, 1);
                 titleText.text = tempString;
-                yield return new WaitForSeconds(titleTextIntervall);
+                yield return new WaitForSeconds(Random.Range(.05f, .25f));
             }
         }
     }
