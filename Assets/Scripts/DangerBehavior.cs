@@ -1,30 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class DangerBehavior : MonoBehaviour
-{
+public class DangerBehavior : MonoBehaviour {
 
-    [SerializeField] private float animationDuration = .5f;
-    [SerializeField] private AnimationCurve animationCurve;
+    [SerializeField] float animationDuration = .5f;
+    [SerializeField] AnimationCurve animationCurve;
 
-    [SerializeField] private Vector3 maxScale;
+    [SerializeField] Vector3 maxScale;
 
-    private Coroutine animationRoutine;
+    Coroutine animationRoutine;
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        GameObject other = collision.gameObject;
-        SpecimenBehavior npc = other.GetComponent<SpecimenBehavior>();
-        if (npc != null)
-        {
+    void OnTriggerEnter2D(Collider2D collision) {
+        var other = collision.gameObject;
+        var npc = other.GetComponent<SpecimenBehavior>();
+        if (npc != null) {
             npc.AbortAction();
 
-            if (npc.thought != Thought.Danger)
-            {
+            if (npc.thought != Thought.Danger) {
                 npc.TrapIn(transform);
-                if (animationRoutine != null)
-                {
+                if (animationRoutine != null) {
                     StopCoroutine(animationRoutine);
                     transform.localScale = Vector3.one;
                 }
