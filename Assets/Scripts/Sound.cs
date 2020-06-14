@@ -2,8 +2,7 @@
 using UnityEngine.Audio;
 
 [System.Serializable]
-public class Sound
-{
+public class Sound {
     public string name;
     [HideInInspector]
     public AudioSource source;
@@ -25,8 +24,7 @@ public class Sound
 }
 
 [System.Serializable]
-public class SoundContainer
-{
+public class SoundContainer {
     public string name;
     public AudioClip[] clips;
     public Sound[] sounds;
