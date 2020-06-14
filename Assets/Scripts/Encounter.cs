@@ -1,21 +1,17 @@
-﻿using UnityEngine;
-using UnityEditor;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
-public static class Encounter
-{
-    public static IEnumerator Create(IEncounterable sender, SpecimenBehavior receiver)
-    {
+public static class Encounter {
+    public static IEnumerator Create(IEncounterable sender, SpecimenBehavior receiver) {
         sender.PrepareEncounter(receiver);
         receiver.PrepareEncounter(sender);
 
-        var distance = 2f;
-        var x = sender.GetTransform().position.x + distance;
-        var y = sender.GetTransform().position.y;
+        float distance = 2f;
+        float x = sender.GetTransform().position.x + distance;
+        float y = sender.GetTransform().position.y;
 
-        IEnumerator list = receiver.MoveToPositionRoutine(new Vector2(x, y));
-        while (list.MoveNext())
-        {
+        var list = receiver.MoveToPositionRoutine(new Vector2(x, y));
+        while (list.MoveNext()) {
             yield return list.Current;
         }
 
@@ -29,9 +25,8 @@ public static class Encounter
         yield return new WaitForSeconds(0.8f);
 
         if (communicationSuccessful) {
-            IEnumerator thoughts = sender.ApplyThoughtRoutine(package.thought, receiver);
-            while (thoughts.MoveNext())
-            {
+            var thoughts = sender.ApplyThoughtRoutine(package.thought, receiver);
+            while (thoughts.MoveNext()) {
                 yield return thoughts.Current;
             }
         }
