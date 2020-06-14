@@ -13,4 +13,5 @@ Franken Game Jam 2018
 - Lena Voß (art)
 
 ### Third-party assets
-- [RonenNess' Unity-2d-pathfinding](https://github.com/RonenNess/Unity-2d-pathfinding)
+- [moderna (Fontalicious Fonts 2002)](http://www.fontalicious.com/project/moderna/)
+- [Unity-2d-pathfinding (RonenNess 2017)](https://github.com/RonenNess/Unity-2d-pathfinding)
