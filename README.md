@@ -11,3 +11,6 @@ Franken Game Jam 2018
 - Sven Schäfer (programming, sound design)
 - Daniel Schulz (programming)
 - Lena Voß (art)
+
+### Third-party assets
+- [RonenNess' Unity-2d-pathfinding](https://github.com/RonenNess/Unity-2d-pathfinding)
