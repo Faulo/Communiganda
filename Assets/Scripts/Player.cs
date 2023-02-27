@@ -11,7 +11,7 @@ namespace Communiganda {
 
         bool moving = false;
 
-        PathfindingGrid pathfindingGrid { get { return PathfindingGrid.Instance; } }
+        PathfindingGrid pathfindingGrid { get { return PathfindingGrid.instance; } }
         Rigidbody2D body2d;
 
         Vector2 input;
@@ -69,7 +69,7 @@ namespace Communiganda {
         void HandlePlayerInput() {
             input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             moving = input.sqrMagnitude > .1f;
-            body2d.velocity = input * moveSpeed * Time.deltaTime;
+            body2d.velocity = moveSpeed * Time.deltaTime * input;
         }
 
         public void StartSpeechAttack() {

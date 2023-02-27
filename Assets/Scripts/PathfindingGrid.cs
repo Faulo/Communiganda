@@ -7,15 +7,15 @@ namespace Communiganda {
         public int height = 5;
         bool[,] tilesmap;
 
-        public NesScripts.Controls.PathFind.Grid Grid { get; private set; }
-        public static PathfindingGrid Instance;
+        public NesScripts.Controls.PathFind.Grid grid { get; private set; }
+        public static PathfindingGrid instance;
 
         [SerializeField] Transform backgroundTransform;
 
         public LayerMask obstacleMask;
 
         void Awake() {
-            Instance = this;
+            instance = this;
             SetEdgeColliders();
             // backgroundTransform.position = new Vector3((width / 2f) - .5f, (height / 2) - .5f, 0);
             //  backgroundTransform.localScale = new Vector3(width, height, 0);
@@ -32,7 +32,7 @@ namespace Communiganda {
                     }
                 }
             }
-            Grid = new NesScripts.Controls.PathFind.Grid(tilesmap);
+            grid = new NesScripts.Controls.PathFind.Grid(tilesmap);
             // Camera.main.transform.position = Vector3.zero + new Vector3((width - 1) / 2, (height - 1) / 2f, -100f);
         }
 
@@ -75,7 +75,7 @@ namespace Communiganda {
         }
 
         public Vector2[] GetWaypoints(Point from, Point to) {
-            var path = Pathfinding.FindPath(Grid, from, to);
+            var path = Pathfinding.FindPath(grid, from, to);
             var points = new Vector2[path.Count];
             for (int i = 0; i < points.Length; i++) {
                 points[i] = new Vector2(path[i].x, path[i].y);

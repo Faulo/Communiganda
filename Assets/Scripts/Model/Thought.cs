@@ -20,7 +20,7 @@ namespace Communiganda.Model {
         public static Sprite GetSprite(this Thought thought) {
             return sprites[(int)thought];
         }
-        public static void Battle(this Thought thought, IEncounterable sender, IEncounterable receiver) {
+        public static void Battle(this Thought _, IEncounterable sender, IEncounterable receiver) {
             if (!receiver.HasThought()) {
                 receiver.SetThought(sender.GetThought());
             }

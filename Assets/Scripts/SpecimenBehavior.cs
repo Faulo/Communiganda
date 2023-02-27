@@ -8,11 +8,9 @@ namespace Communiganda {
     public class SpecimenBehavior : MonoBehaviour, IEncounterable {
         enum State { Idle, Walking, Talking, Trapped };
 
-        static readonly System.Random random = new System.Random();
-
         static PathfindingGrid pathfindingGrid {
             get {
-                return PathfindingGrid.Instance;
+                return PathfindingGrid.instance;
             }
         }
 
@@ -59,7 +57,7 @@ namespace Communiganda {
         Transform lookingTarget;
         Transform walkingTarget;
 
-        Transform bodyTransform;
+        // Transform bodyTransform;
         SpriteRenderer leftFootSpriteRenderer;
         SpriteRenderer rightFootSpriteRenderer;
 
@@ -75,7 +73,7 @@ namespace Communiganda {
             receiveBubble = transform.Find("Sprites").Find("SendBubble").gameObject;
             receiveSymbolSpriteRenderer = receiveBubble.transform.Find("Symbol").GetComponent<SpriteRenderer>();
 
-            bodyTransform = transform.Find("Sprites").Find("Body");
+            // bodyTransform = transform.Find("Sprites").Find("Body");
             leftFootSpriteRenderer = transform.Find("Sprites").Find("LeftFoot").GetComponent<SpriteRenderer>();
             rightFootSpriteRenderer = transform.Find("Sprites").Find("RightFoot").GetComponent<SpriteRenderer>();
 
@@ -108,7 +106,7 @@ namespace Communiganda {
         }
         void UpdateScale() {
             if (transform.localScale.z < 1.0f) {
-                transform.localScale += Time.deltaTime * Vector3.one * 0.1f;
+                transform.localScale += 0.1f * Time.deltaTime * Vector3.one;
             }
         }
 
@@ -144,17 +142,16 @@ namespace Communiganda {
 
         IEnumerator MovementRoutine() {
             state = State.Walking;
-            var _from = pathfindingGrid.ConvertPositionToPoint(new Vector2(transform.position.x, transform.position.y));
-            Point _to;
+            var from = pathfindingGrid.ConvertPositionToPoint(new Vector2(transform.position.x, transform.position.y));
+            Point to;
             if (walkingTarget == null) {
-                _to = pathfindingGrid.GenerateRandomTargetPointInsideGrid();
+                to = pathfindingGrid.GenerateRandomTargetPointInsideGrid();
             } else {
-                _to = pathfindingGrid.ConvertPositionToPoint(new Vector2(walkingTarget.position.x, walkingTarget.position.y));
-                ;
+                to = pathfindingGrid.ConvertPositionToPoint(new Vector2(walkingTarget.position.x, walkingTarget.position.y));
                 walkingTarget = null;
             }
 
-            var routine = Utility.instance.MoveToWaypointsRoutine(transform, moveDuration, null, pathfindingGrid.GetWaypoints(_from, _to));
+            var routine = Utility.instance.MoveToWaypointsRoutine(transform, moveDuration, null, pathfindingGrid.GetWaypoints(from, to));
             yield return StartCoroutine(routine);
 
             yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 2.0f) * Time.timeScale);

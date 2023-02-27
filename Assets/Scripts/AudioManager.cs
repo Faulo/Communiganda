@@ -210,10 +210,10 @@ namespace Communiganda {
             }
         }
 
-        public void FadeOutAudioCostum(string soundName, float duration, Action OnComplete, bool stopPlayingOnFadeOutComplete = true) {
-            StartCoroutine(FadeOutAudioCostumRoutine(soundName, duration, OnComplete, stopPlayingOnFadeOutComplete));
+        public void FadeOutAudioCostum(string soundName, float duration, Action onComplete, bool stopPlayingOnFadeOutComplete = true) {
+            StartCoroutine(FadeOutAudioCostumRoutine(soundName, duration, onComplete, stopPlayingOnFadeOutComplete));
         }
-        public IEnumerator FadeOutAudioCostumRoutine(string soundName, float duration, Action OnComplete, bool stopPlayingOnFadeOutComplete = true) {
+        public IEnumerator FadeOutAudioCostumRoutine(string soundName, float duration, Action onComplete, bool stopPlayingOnFadeOutComplete = true) {
             var source = GetAudioSource(soundName);
             int steps = Mathf.RoundToInt(duration / Time.fixedDeltaTime);
             float progress = 0f;
@@ -226,7 +226,7 @@ namespace Communiganda {
                 source.volume = newVolume;
                 yield return new WaitForFixedUpdate();
             }
-            OnComplete.Invoke();
+            onComplete.Invoke();
             if (stopPlayingOnFadeOutComplete) {
                 source.Stop();
             }
@@ -253,10 +253,10 @@ namespace Communiganda {
             }
         }
 
-        public void FadeToAudioCostum(string soundName, float targetVolume, float duration, Action OnComplete, bool stopPlayingOnFadeOutComplete = true) {
-            StartCoroutine(FadeToAudioCostumRoutine(soundName, targetVolume, duration, OnComplete, stopPlayingOnFadeOutComplete));
+        public void FadeToAudioCostum(string soundName, float targetVolume, float duration, Action onComplete, bool stopPlayingOnFadeOutComplete = true) {
+            StartCoroutine(FadeToAudioCostumRoutine(soundName, targetVolume, duration, onComplete, stopPlayingOnFadeOutComplete));
         }
-        public IEnumerator FadeToAudioCostumRoutine(string soundName, float targetVolume, float duration, Action OnComplete, bool stopPlayingOnFadeOutComplete = true) {
+        public IEnumerator FadeToAudioCostumRoutine(string soundName, float targetVolume, float duration, Action onComplete, bool stopPlayingOnFadeOutComplete = true) {
             var source = GetAudioSource(soundName);
             int steps = Mathf.RoundToInt(duration / Time.fixedDeltaTime);
             float progress = 0f;
@@ -269,7 +269,7 @@ namespace Communiganda {
                 source.volume = newVolume;
                 yield return new WaitForFixedUpdate();
             }
-            OnComplete.Invoke();
+            onComplete.Invoke();
             if (stopPlayingOnFadeOutComplete) {
                 source.Stop();
             }
