@@ -1,20 +1,23 @@
-﻿using System.Collections;
+using System.Collections;
+using Communiganda.Model;
 using UnityEngine;
 
-public interface IEncounterable {
-    Transform GetTransform();
+namespace Communiganda {
+    public interface IEncounterable {
+        Transform GetTransform();
 
-    bool HasThought();
-    Thought GetThought();
-    void SetThought(Thought thought);
+        bool HasThought();
+        Thought GetThought();
+        void SetThought(Thought thought);
 
-    void AbortAction();
-    void PrepareEncounter(IEncounterable npc);
-    void FinishEncounter();
+        void AbortAction();
+        void PrepareEncounter(IEncounterable npc);
+        void FinishEncounter();
 
-    Package CreatePackage();
-    bool ReceivePackage(Package package);
-    IEnumerator ApplyThoughtRoutine(Thought senderThought, SpecimenBehavior receiver);
+        Package CreatePackage();
+        bool ReceivePackage(Package package);
+        IEnumerator ApplyThoughtRoutine(Thought senderThought, SpecimenBehavior receiver);
 
-    void SetWalkingTarget(Transform target);
+        void SetWalkingTarget(Transform target);
+    }
 }
