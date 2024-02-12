@@ -54,6 +54,9 @@ namespace Communiganda {
 
             UpdateFace();
         }
+        void FixedUpdate() {
+            body2d.velocity = moveSpeed * input;
+        }
         void UpdateFace() {
             var target = new Vector2(lookingTarget.position.x, lookingTarget.position.y) + body2d.velocity;
 
@@ -69,7 +72,6 @@ namespace Communiganda {
         void HandlePlayerInput() {
             input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             moving = input.sqrMagnitude > .1f;
-            body2d.velocity = moveSpeed * Time.deltaTime * input;
         }
 
         public void StartSpeechAttack() {
@@ -108,6 +110,7 @@ namespace Communiganda {
                     hatRotationCounter++;
                     yield return new WaitForSeconds(.1f);
                 }
+
                 yield return null;
             }
         }
