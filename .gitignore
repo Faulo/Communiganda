@@ -13,14 +13,44 @@ $RECYCLE.BIN/
 !.gitignore
 !.gitmodules
 
+# == GitHub ==
+!/.github
+!/*.md
+
+# == Jenkins ==
+!/Jenkinsfile*
+
 # == Visual Studio ==
 !.editorconfig
-!*.md
 
 # == Unity ==
 !/Assets/
 !/ProjectSettings/
 !/Packages/
+/Assets/InitTestScene*
 
-# == Jenkins ==
-!Jenkinsfile
+# == Blender ==
+*.blend1*
+
+# == Cubase ==
+!/Cubase Project/
+
+# == FMOD ==
+# Never ignore DLLs in the FMOD subfolder.
+!/[Aa]ssets/Plugins/FMOD/**/lib/*
+.cache
+.unsaved
+.user
+fmod_editor.log
+
+# Don't ignore images and gizmos used by FMOD in the Unity Editor.
+!/[Aa]ssets/Gizmos/FMOD/*
+!/[Aa]ssets/Editor Default Resources/FMOD/*
+                    
+# Ignore the Cache folder since it is updated locally.
+/[Aa]ssets/Plugins/FMOD/Cache/*
+                    
+# Ignore bank files in the StreamingAssets folder.
+/[Aa]ssets/StreamingAssets/**/*.bank
+/[Aa]ssets/StreamingAssets/**/*.bank.meta
+                 
